@@ -1,0 +1,52 @@
+{% extends 'payapp/main.html' %}
+{% block content %}
+<h1>Admin View</h1>
+<div class="row">
+    <div class="col-md-5">
+        <h3>Users</h3>
+        <form method="POST" action="{% url 'update_roles' %}">
+            {% csrf_token %}
+            <table class="table">
+                <tr>
+                    <th>Email</th>
+                    <th>Balance</th>
+                    <th>Admin?</th>
+                </tr>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.email }}</td>
+                    <td>{% if user.currency == 'GBP' %}£{% elif user.currency == 'USD' %}${% elif user.currency == 'EUR' %}€{% endif %}{{ user.balance }}</td>
+                    <td><input type="checkbox" name="is_admin" value="{{ user.id }}" {% if user.is_staff %}checked{% endif %}></td>
+                </tr>
+            {% endfor %}
+            </table>
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            <br>
+            <button type="submit" class="btn btn-primary">Update Admins</button>
+        </form>
+    </div>
+    <div class="col-md-7">
+        <h3>Transactions</h3>
+        <table class="table" style="font-size: 11px;">
+            <tr>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Timestamp</th>
+            </tr>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.sender }}</td>
+                    <td>{{ transaction.receiver }}</td>
+                    <td>{% if transaction.currency == 'GBP' %}£{% elif transaction.currency == 'USD' %}${% elif transaction.currency == 'EUR' %}€{% endif %}{{ transaction.amount }}</td>
+                    <td>{{ transaction.timestamp }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+</div>
+{% endblock %}

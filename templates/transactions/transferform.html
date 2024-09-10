@@ -1,0 +1,21 @@
+{% extends 'payapp/main.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="col-md-6">
+    <h1>Transfer Money</h1>
+    <form method="POST" action="{% url 'transfer' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    <div>
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,30 @@
+{% extends 'payapp/main.html' %}
+{% block content %}
+    <div class="col-md-6">
+        <h1>Transaction History</h1>
+        <table class="table">
+            <tr>
+                <th>User</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+            {% for transaction in history %}
+                <tr>
+                    <td>{% if transaction.sender == request.user %}
+                            {{ transaction.receiver }}
+                        {% else %}
+                            {{ transaction.sender }}
+                    {% endif %}</td>
+                    <td style="color: {% if transaction.sender == request.user %}
+                            black    
+                        {% else %}
+                            green
+                        {% endif %}">
+                        {% if transaction.currency == 'GBP' %}£{% elif transaction.currency == 'USD' %}${% elif transaction.currency == 'EUR' %}€{% endif %}
+                        {% if transaction.sender == request.user %}-{% else %}+{% endif %}{{transaction.amount}}</td>
+                    <td>{{ transaction.timestamp|date:"j F Y" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
